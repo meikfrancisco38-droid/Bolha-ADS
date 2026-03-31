@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bolha Ads</title>
+</head>
+
+<body style="background:black; color:gold; text-align:center; font-family:Arial; margin:0;">
+
+<h1 style="padding:20px; text-shadow:0 0 15px gold;">BOLHA ADS</h1>
+
+<!-- LOGIN -->
+<div id="login">
+    <input id="nome" placeholder="Digite seu nome" style="padding:10px; border-radius:8px;">
+    <br><br>
+    <button onclick="entrar()" style="padding:10px 20px;">Entrar</button>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none; margin-top:20px;">
+
+    <h2 id="boas"></h2>
+
+    <p id="saldo">Saldo: 0 Kz</p>
+    <p id="pontos">Pontos: 0</p>
+
+    <div style="background:#333; width:80%; margin:auto; border-radius:10px;">
+        <div id="barra" style="background:gold; width:0%; padding:5px;"></div>
+    </div>
+
+    <br>
+
+    <button onclick="ganhar()">GANHAR</button>
+    <button onclick="sacar()">SACAR</button>
+
+</div>
+
+<script>
+
+// DADOS
+let saldo = Number(localStorage.getItem("saldo")) || 0;
+let pontos = Number(localStorage.getItem("pontos")) || 0;
+let nomeSalvo = localStorage.getItem("nome");
+
+// INICIAR
+if(nomeSalvo){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.getElementById("boas").innerText = "Bem-vindo, " + nomeSalvo;
+}
+
+atualizar();
+
+// FUNÇÕES
+function entrar(){
+    let nome = document.getElementById("nome").value;
+
+    if(nome === ""){
+        alert("Digite seu nome");
+        return;
+    }
+
+    localStorage.setItem("nome", nome);
+
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+
+    document.getElementById("boas").innerText = "Bem-vindo, " + nome;
+}
+
+function ganhar(){
+    pontos += 10;
+
+    if(pontos >= 100){
+        saldo += 10;
+        pontos = 0;
+    }
+
+    salvar();
+    atualizar();
+}
+
+function sacar(){
+    if(saldo >= 50){
+        alert("Saque solicitado 💰");
+        saldo -= 50;
+    } else {
+        alert("Saldo mínimo: 50 Kz");
+    }
+
+    salvar();
+    atualizar();
+}
+
+function salvar(){
+    localStorage.setItem("saldo", saldo);
+    localStorage.setItem("pontos", pontos);
+}
+
+function atualizar(){
+    document.getElementById("saldo").innerText = "Saldo: " + saldo + " Kz";
+    document.getElementById("pontos").innerText = "Pontos: " + pontos;
+    document.getElementById("barra").style.width = pontos + "%";
+}
+
+</script>
+
+</body>
+</html>
